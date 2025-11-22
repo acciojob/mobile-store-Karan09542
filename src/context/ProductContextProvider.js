@@ -78,8 +78,18 @@ export const ProductContextProvider = (props) => {
         "Premium Android phone with AMOLED display and powerful performance.",
     },
   ]);
+  const updateProduct = (product) => {
+    setProducts((prev) => prev.map((p) => (p.id === product.id ? product : p)));
+  }
+  const deleteProduct = (id) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  }
+
+  const addProduct = (product) => {
+    setProducts((prev) => [...prev, product]);
+  }
   return (
-    <ProductContext.Provider value={{ products, setProducts }}>
+    <ProductContext.Provider value={{ products, updateProduct, deleteProduct, addProduct }}>
       {props.children}
     </ProductContext.Provider>
   );

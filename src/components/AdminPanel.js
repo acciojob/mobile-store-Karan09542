@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { ProductContext } from "../context/ProductContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const ProductTile = ({ product, onClick }) => {
   return (
@@ -13,6 +14,7 @@ const ProductTile = ({ product, onClick }) => {
         padding: "10px",
         gap: "10px",
         marginBottom: "10px",
+        cursor: "pointer",
       }}
     >
       <img
@@ -28,7 +30,8 @@ const ProductTile = ({ product, onClick }) => {
 };
 
 const AdminPanel = () => {
-  const { products, setProducts } = useContext(ProductContext);
+  const navigate = useNavigate();
+  const { products, addProduct } = useContext(ProductContext);
   const [product, setProduct] = React.useState({
     name: "",
     price: "",
@@ -36,7 +39,7 @@ const AdminPanel = () => {
     description: "",
     id: products.length + 1,
   });
-  const [showForm, setShowForm] = React.useState({ type: "" });
+  const [showForm, setShowForm] = React.useState(false);
 
   const handleChange = (e) => {
     const id = e.target.id;
@@ -46,20 +49,6 @@ const AdminPanel = () => {
       [id]: value,
     }));
   };
-  function addProduct() {
-    setProducts((prev) => [{ ...product, id: products.length + 1 }, ...prev]);
-    setShowForm({ type: "" });
-  }
-  function updateProduct() {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === product.id ? { ...product } : p))
-    );
-    setShowForm({ type: "" });
-  }
-  function deleteProduct() {
-    setProducts((prev) => prev.filter((p) => p.id !== product.id));
-    setShowForm({ type: "" });
-  }
   return (
     <div className="admin-products">
       <button
@@ -71,7 +60,7 @@ const AdminPanel = () => {
             description: "",
             id: products.length + 1,
           });
-          setShowForm((prev) => ({ type: prev.type ? "" : "add" }));
+          setShowForm(true);
         }}
         style={{ margin: "10px 0" }}
       >
@@ -81,17 +70,12 @@ const AdminPanel = () => {
         {products.map((product) => (
           <ProductTile
             key={product.id}
-            onClick={() => {
-              setProduct(product);
-              setShowForm((prev) => ({
-                type: prev.type ? "" : "edit",
-              }));
-            }}
+            onClick={() => navigate(`products/${product.id}`)}
             product={product}
           />
         ))}
       </div>
-      {showForm.type && (
+      {showForm && (
         <form className="form-control">
           <div>
             <label htmlFor="name">Name: </label>
@@ -135,21 +119,16 @@ const AdminPanel = () => {
               placeholder="Product Image"
             />
           </div>
-          {showForm.type === "add" && (
-            <button type="button" onClick={addProduct}>
-              Add Product
-            </button>
-          )}
-          {showForm.type === "edit" && (
-            <div className="buttons">
-              <button className="float-right" type="button" onClick={updateProduct}>
-                Save
-              </button>
-              <button className="float-right" type="button" onClick={deleteProduct}>
-                Delete
-              </button>
-            </div>
-          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              addProduct(product);
+              setShowForm(false);
+            }}
+          >
+            Add Product
+          </button>
         </form>
       )}
     </div>

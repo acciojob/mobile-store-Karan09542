@@ -5,6 +5,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import ProductList from "./ProductList"
 import ProductDetails from "./ProductDetails"
 import AdminPanel from "./AdminPanel"
+import EditProduct from "./EditProduct";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/products/:id" element={<EditProduct />} />
         </Routes>
     </div>
   )
