@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { ProductContext } from "../context/ProductContextProvider";
 import { useNavigate } from "react-router-dom";
 
-const ProductTile = ({ product, onClick }) => {
+const ProductTile = ({ product, Clk }) => {
   return (
     <div
-      onClick={onClick}
+      onClick={Clk}
       style={{
         display: "flex",
         alignItems: "center",
@@ -60,7 +60,7 @@ const AdminPanel = () => {
             description: "",
             id: products.length + 1,
           });
-          setShowForm(true);
+          setShowForm(prev => !prev);
         }}
         style={{ margin: "10px 0" }}
       >
@@ -70,7 +70,7 @@ const AdminPanel = () => {
         {products.map((product) => (
           <ProductTile
             key={product.id}
-            onClick={() => navigate(`products/${product.id}`)}
+            Clk={() => navigate(`products/${product.id}`)}
             product={product}
           />
         ))}
@@ -127,7 +127,7 @@ const AdminPanel = () => {
               setShowForm(false);
             }}
           >
-            Add Product
+            Add
           </button>
         </form>
       )}
